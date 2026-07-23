@@ -1,0 +1,60 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: database
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-db_admin}
+      POSTGRES_USER: ${POSTGRES_USER:-user_admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-user_password123}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5439}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    command:
+      - postgres
+      - -c
+      - config_file=/etc/postgresql/postgresql.conf
+      - -c
+      - hba_file=/etc/postgresql/pg_hba.conf
+    ports:
+      - 5439:5439
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./configs/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+      - ./configs/pg_hba.conf:/etc/postgresql/pg_hba.conf:ro
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -h 127.0.0.1 -p 5439 -U $${POSTGRES_USER} -d $${POSTGRES_DB}",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - local-network
+  discord-bot:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    image: dsa-digital-discord-bot:v1
+    container_name: discord-bot
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      DISCORD_CLIENT_ID: ${DISCORD_CLIENT_ID}
+      DISCORD_GUILD_ID: ${DISCORD_GUILD_ID}
+      USE_GLOBAL_COMMANDS: ${USE_GLOBAL_COMMANDS:-false}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://${POSTGRES_USER:-user_admin}:${POSTGRES_PASSWORD:-user_password123}@postgres:5439/${POSTGRES_DB:-db_admin}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - local-network
+
+networks:
+  local-network:
+    driver: bridge
+volumes:
+  postgres-data:

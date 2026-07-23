@@ -1,0 +1,25 @@
+const { GatewayIntentBits } = require("discord-api-types/v10");
+
+module.exports = [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.AutoModerationConfiguration,
+    GatewayIntentBits.DirectMessagePolls,
+    GatewayIntentBits.DirectMessageReactions,
+    GatewayIntentBits.DirectMessageTyping,
+    GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.GuildExpressions,
+    GatewayIntentBits.GuildIntegrations,
+    GatewayIntentBits.GuildInvites,
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessagePolls,
+    GatewayIntentBits.GuildMessageReactions,
+    GatewayIntentBits.GuildMessageTyping,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildModeration,
+    GatewayIntentBits.GuildPresences,
+    GatewayIntentBits.GuildScheduledEvents,
+    GatewayIntentBits.GuildVoiceStates,
+    GatewayIntentBits.GuildWebhooks,
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.MessageContent,
+];
