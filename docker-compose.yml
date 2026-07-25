@@ -35,9 +35,6 @@ services:
 
       CHICO_VERIFIED_ROLE_ID: ${CHICO_VERIFIED_ROLE_ID}
       CHICO_SIZE_CHANNEL_ID: ${CHICO_SIZE_CHANNEL_ID}
-    depends_on:
-      postgres:
-        condition: service_healthy
     networks:
       - local-network
 
