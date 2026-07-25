@@ -47,6 +47,9 @@ services:
       DISCORD_GUILD_ID: ${DISCORD_GUILD_ID}
       USE_GLOBAL_COMMANDS: ${USE_GLOBAL_COMMANDS:-false}
       DATABASE_URL: ${DATABASE_URL:-postgresql://${POSTGRES_USER:-user_admin}:${POSTGRES_PASSWORD:-user_password123}@postgres:5439/${POSTGRES_DB:-db_admin}
+      MIGRATE_ON_RUN: ${MIGRATE_ON_RUN:-false}
+      CHICO_VERIFIED_ROLE_ID: ${CHICO_VERIFIED_ROLE_ID}
+      CHICO_SIZE_CHANNEL_ID: ${CHICO_SIZE_CHANNEL_ID}
     depends_on:
       postgres:
         condition: service_healthy
