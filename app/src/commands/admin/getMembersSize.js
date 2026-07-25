@@ -11,7 +11,6 @@ module.exports = {
 
             interaction.reply({
                 content: `No servidor possui um total de **${guild.members.cache.size}** Membros.`,
-                flags: MessageFlags.Ephemeral
             });
         } catch (err) {
             console.log(err);

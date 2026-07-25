@@ -6,7 +6,6 @@ module.exports = {
         try {
             interaction.reply({
                 content: "Pong!",
-                flags: MessageFlags.Ephemeral
             });
         } catch (err) {
             console.log(err);

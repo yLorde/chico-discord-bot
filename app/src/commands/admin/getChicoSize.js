@@ -12,7 +12,6 @@ module.exports = {
 
             interaction.reply({
                 content: `No servidor possui um total de **${chico.members.size}** Chicos verificados`,
-                flags: MessageFlags.Ephemeral
             });
         } catch (err) {
             console.log(err);

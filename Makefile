@@ -37,10 +37,10 @@ up-detached:
 	$(COMPOSE) up -d --build
 
 up-db:
-	$(COMPOSE) up -d --build postgres
+	$(COMPOSE) up -d --build mongo && $(COMPOSE) up -d --build mongo-express
 
 up-db-detached:
-	$(COMPOSE) up -d postgres
+	$(COMPOSE) up -d mongo && $(COMPOSE) up -d mongo-express
 
 down:
 	$(COMPOSE) down
@@ -55,13 +55,13 @@ logs:
 	$(COMPOSE) logs -f
 
 restart-db:
-	$(COMPOSE) restart postgres
+	$(COMPOSE) restart mongo && $(COMPOSE) restart mongo-express
 
 restart-discord-bot:
 	$(COMPOSE) restart discord-bot
 
 logs-db:
-	$(COMPOSE) logs -f postgres
+	$(COMPOSE) logs -f mongo && $(COMPOSE) logs -f mongo-express
 
 logs-discord-bot:
 	$(COMPOSE) logs -f discord-bot
