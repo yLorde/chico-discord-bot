@@ -2,7 +2,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
-const { Client, REST, Routes } = require('discord.js');
+const { Client, REST, Routes, Collection } = require('discord.js');
 
 const GatewayIntentBits = require('./discord/GatewayIntentBits.js');
 const Partials = require('./discord/Partials.js');
@@ -19,6 +19,8 @@ const connectToDatabase = require('./database/connectToDatabase.js');
     await connectToDatabase();
 
     const commands = [];
+    client.commands = new Collection();
+
     // Grab all the command folders from the commands directory you created earlier
     const foldersPath = path.join(__dirname, 'commands');
     const commandFolders = fs.readdirSync(foldersPath);
@@ -31,6 +33,7 @@ const connectToDatabase = require('./database/connectToDatabase.js');
             const filePath = path.join(commandsPath, file);
             const command = require(filePath);
             if ('data' in command && 'execute' in command) {
+                client.commands.set(command.data.name, command);
                 commands.push(command.data.toJSON());
             } else {
                 console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
@@ -45,13 +48,7 @@ const connectToDatabase = require('./database/connectToDatabase.js');
         try {
             console.log(`Started refreshing ${commands.length} application (/) commands.`);
             // The put method is used to fully refresh all commands in the guild with the current set
-            const data = async () => {
-                if (process.env.USE_GLOBAL_COMMANDS === 'true') {
-                    return (await rest.put(Routes.applicationCommands(process.env.DISCORD_CLIENT_ID || client.application.id), { body: commands }));
-                } else {
-                    return (await rest.put(Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID, process.env.DISCORD_GUILD_ID), { body: commands }));
-                };
-            };
+            const data = await rest.put(Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID, process.env.DISCORD_GUILD_ID), { body: commands })
             console.log(`Successfully reloaded ${data.length} application (/) commands.`);
         } catch (error) {
             // And of course, make sure you catch and log any errors!
