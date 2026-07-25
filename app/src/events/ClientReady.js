@@ -21,11 +21,13 @@ module.exports = {
             }]
         });
 
-        const connection = joinVoiceChannel({
-            channelId: process.env.CHICO_SIZE_CHANNEL_ID,
-            guildId: process.env.DISCORD_GUILD_ID,
-            adapterCreator: guild.voiceAdapterCreator
-        });
+        if (process.env.NODE_ENV === "production") {
+            const connection = joinVoiceChannel({
+                channelId: process.env.CHICO_SIZE_CHANNEL_ID,
+                guildId: process.env.DISCORD_GUILD_ID,
+                adapterCreator: guild.voiceAdapterCreator
+            });
+        };
 
         setInterval(() => {
             channel.setName(`CHICOS: ${chico.members.size}`);
